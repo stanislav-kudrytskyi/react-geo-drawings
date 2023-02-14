@@ -4,8 +4,13 @@ import { useContextMenu, useDrawingManger } from './MapContext';
 import { useAddedPolygons, useDispatchPolygonAdded } from '../../drawings/PolygonBoard';
 import { mvcToLatLong } from '../../utils';
 import { Polygon } from '../..';
+import { PolygonDisplaySettings } from '../../drawings/Polygon';
 
-const ControlBoard = (): JSX.Element|null => {
+interface ControlBoardProps {
+    addedPolygonDisplaySettings?: PolygonDisplaySettings;
+}
+
+const ControlBoard = ({ addedPolygonDisplaySettings }: ControlBoardProps): JSX.Element|null => {
     const drawingManager = useDrawingManger();
     const dispatch = useDispatchPolygonAdded();
     const contextMenu = useContextMenu();
@@ -37,6 +42,7 @@ const ControlBoard = (): JSX.Element|null => {
         <>
             {addedPolygons.map((polygon) => (
                 <Polygon
+                    displaySettings={addedPolygonDisplaySettings}
                     key={polygon.polygonId}
                     apiObject={polygon.apiObject}
                     coordinates={polygon.points}

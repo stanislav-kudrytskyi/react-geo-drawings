@@ -102,7 +102,6 @@ export const contextMenuOverlayFactory = (map: google.maps.Map): ContextMenu => 
                 this.close();
                 return;
             }
-
             path.removeAt(vertex);
             this.close();
         }

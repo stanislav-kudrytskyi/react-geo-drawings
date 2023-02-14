@@ -35,6 +35,13 @@ const GooglePolygon = ({
     useEffect(() => {
         if (googlePolygon) {
             setPolygon(googlePolygon);
+            googlePolygon.setOptions({
+                strokeColor: displaySettings?.borderColor,
+                strokeOpacity: displaySettings?.borderOpacity,
+                strokeWeight: displaySettings?.borderWidth,
+                fillColor: displaySettings?.fillColor,
+                fillOpacity: displaySettings?.fillOpacity,
+            });
         } else if (!polygon) {
             const p = new google.maps.Polygon({
                 paths: coordinates,

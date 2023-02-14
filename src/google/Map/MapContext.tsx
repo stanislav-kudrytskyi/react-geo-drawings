@@ -6,11 +6,16 @@ import Map from './Map';
 import DrawingManager from './DrawingManager';
 import ControlBoard from './ControlBoard';
 import { ContextMenu, contextMenuOverlayFactory } from '../Menu/ContextMenuOverlayView';
+import { Point } from '../../index';
+import { PolygonDisplaySettings } from '../../drawings/Polygon';
 
 export interface MapProviderProps {
     containerRef: RefObject<HTMLDivElement>;
     children?: ReactNode;
     googleApiKey?: string;
+    center?: Point;
+    minZoom?: number;
+    addedPolygonDisplaySettings?: PolygonDisplaySettings;
 }
 
 interface GoogleMapState {
@@ -45,16 +50,23 @@ const mapReducer = (state: GoogleMapState, action: Action): GoogleMapState => {
 
 const render = (status: Status) => <h1>{status}</h1>;
 
-export const GoogleMapProvider = ({ children, googleApiKey, containerRef }: MapProviderProps) => {
+export const GoogleMapProvider = ({
+    children, googleApiKey, containerRef, center, minZoom, addedPolygonDisplaySettings,
+}: MapProviderProps) => {
     const [state, dispatch] = useReducer(mapReducer, { map: undefined });
     return (
         <Wrapper apiKey={googleApiKey || ''} render={render} libraries={['drawing']}>
             <GoogleMapContext.Provider value={state}>
-                <Map container={containerRef} onInit={(map) => dispatch({ type: 'setMap', data: map })} />
+                <Map
+                    container={containerRef}
+                    onInit={(map) => dispatch({ type: 'setMap', data: map })}
+                    center={center}
+                    minZoom={minZoom}
+                />
                 <DrawingManager
                     onInit={(drawingManager) => dispatch({ type: 'setDrawingManager', data: drawingManager })}
                 />
-                <ControlBoard />
+                <ControlBoard addedPolygonDisplaySettings={addedPolygonDisplaySettings} />
                 {children || null}
             </GoogleMapContext.Provider>
         </Wrapper>

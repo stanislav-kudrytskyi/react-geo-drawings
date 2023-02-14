@@ -5,20 +5,31 @@ import {
 import { GoogleMapProvider } from '../google/Map/MapContext';
 import MapboxProvider from '../mapbox/Map/MapContext';
 import { Point } from '../index';
+import { PolygonDisplaySettings } from './Polygon';
 
 interface GeoMapProps {
     containerRef: RefObject<HTMLDivElement>;
     children?: ReactNode;
-    center?: Point
+    center?: Point;
+    minZoom?: number;
+    addedPolygonDisplaySettings?: PolygonDisplaySettings;
 }
 
-const GeoMap = ({ containerRef, children, center }: GeoMapProps): JSX.Element => {
+const GeoMap = ({
+    containerRef, children, center, minZoom, addedPolygonDisplaySettings,
+}: GeoMapProps): JSX.Element => {
     const provider = useProvider();
     const apiKey = useApiKey();
 
     if (provider === GOOGLE) {
         return (
-            <GoogleMapProvider containerRef={containerRef} googleApiKey={apiKey}>
+            <GoogleMapProvider
+                containerRef={containerRef}
+                googleApiKey={apiKey}
+                center={center}
+                minZoom={minZoom}
+                addedPolygonDisplaySettings={addedPolygonDisplaySettings}
+            >
                 {children}
             </GoogleMapProvider>
         );
