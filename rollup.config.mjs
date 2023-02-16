@@ -31,7 +31,7 @@ export default [
             css(),
             terser(),
         ],
-        external: ['react', 'react-dom', 'styled-components'],
+        external: ['react', 'react-dom', 'styled-components', 'mapbox-gl'],
     },
     {
         input: 'dist/esm/types/index.d.ts',
