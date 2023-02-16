@@ -23,6 +23,8 @@ const initPolygons: PolygonConfig[] = [
     },
 ];
 
+const kyiv: Point = { lat: 50.4501, lng: 30.5234 };
+
 const PolygonExample = () => {
     const ref = useRef<HTMLDivElement>(null);
     const polygonCoordinates = usePolygonsUpdates();
@@ -69,7 +71,11 @@ const PolygonExample = () => {
             </div>
             <div style={{ display: 'inline-block', width: '50%' }}>
                 <div style={{ height: '600px' }} ref={ref} id="map" />
-                <GeoMap containerRef={ref}>
+                <GeoMap
+                    containerRef={ref}
+                    center={kyiv}
+                    minZoom={3}
+                >
                     {polygons.map(({ name, coords }) => (
                         <Polygon
                             key={name}
