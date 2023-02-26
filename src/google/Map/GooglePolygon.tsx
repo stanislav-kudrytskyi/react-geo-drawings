@@ -96,6 +96,20 @@ const GooglePolygon = ({
         polygon?.setEditable(editable || false);
     }, [polygon, editable]);
 
+    useEffect(() => {
+        polygon?.setOptions({
+            strokeColor: displaySettings?.borderColor,
+            strokeOpacity: displaySettings?.borderOpacity,
+            strokeWeight: displaySettings?.borderWidth,
+            fillColor: displaySettings?.fillColor,
+            fillOpacity: displaySettings?.fillOpacity,
+        });
+    }, [displaySettings, polygon]);
+
+    useEffect(() => {
+        polygon?.setOptions({ paths: coordinates });
+    }, [polygon, coordinates]);
+
     return null;
 };
 

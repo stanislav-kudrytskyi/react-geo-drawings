@@ -50,7 +50,7 @@ const Polygon = ({
                 coordinates={coordinates}
                 editable={editable}
                 onChange={polygonOnChange}
-                displaySettings={displaySettings || defaultDisplaySettings}
+                displaySettings={{ ...defaultDisplaySettings, ...displaySettings }}
                 googlePolygon={apiObject as google.maps.Polygon}
             />
         );

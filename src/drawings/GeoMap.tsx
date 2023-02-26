@@ -7,20 +7,21 @@ import MapboxProvider from '../mapbox/Map/MapContext';
 import { Point } from '../index';
 import { PolygonDisplaySettings } from './Polygon';
 
-interface GeoMapProps {
+export interface GeoMapProps {
     containerRef: RefObject<HTMLDivElement>;
     children?: ReactNode;
     center?: Point;
     minZoom?: number;
+    zoom?: number;
+    onZoomChange?: (zoom?: number) => void;
     addedPolygonDisplaySettings?: PolygonDisplaySettings;
 }
 
 const GeoMap = ({
-    containerRef, children, center, minZoom, addedPolygonDisplaySettings,
+    containerRef, children, center, minZoom, addedPolygonDisplaySettings, zoom, onZoomChange,
 }: GeoMapProps): JSX.Element => {
     const provider = useProvider();
     const apiKey = useApiKey();
-
     if (provider === GOOGLE) {
         return (
             <GoogleMapProvider
@@ -28,6 +29,8 @@ const GeoMap = ({
                 googleApiKey={apiKey}
                 center={center}
                 minZoom={minZoom}
+                zoom={zoom}
+                onZoomChange={onZoomChange}
                 addedPolygonDisplaySettings={addedPolygonDisplaySettings}
             >
                 {children}

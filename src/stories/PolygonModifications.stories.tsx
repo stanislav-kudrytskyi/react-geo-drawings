@@ -1,10 +1,10 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
+import PolygonExample from './PolygonExample';
 import { GeoMap, MapProvider } from '../index';
-import MultiplePolygonExample from './MultiplePolygonsExample';
 
 export default {
-    title: 'GeoDrawing/Polygon/Multiple',
+    title: 'GeoDrawing/Polygon/Settings',
     component: GeoMap,
     parameters: {
         // More on Story layout: https://storybook.js.org/docs/react/configure/story-layout
@@ -14,7 +14,7 @@ export default {
 
 const Template: ComponentStory<typeof GeoMap> = () => (
     <MapProvider provider="google" apiKey="">
-        <MultiplePolygonExample />
+        <PolygonExample />
     </MapProvider>
 );
 
