@@ -1,25 +1,29 @@
 import {
-    createContext, ReactNode, RefObject, useContext, useReducer,
+    createContext, ReactNode, RefObject, useContext, useEffect, useReducer,
 } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
 import Map from './Map';
 import { Point } from '../../index';
+import useLoadMapboxGl from '../useLoadMapboxGl';
+import { MapboxGl, MapboxMap } from '../types';
 
 export interface MapProviderProps {
+    apiKey: string;
     containerRef: RefObject<HTMLDivElement>;
     children?: ReactNode;
     center?: Point;
-    apiKey?: string;
 }
 
 interface MapboxMapState {
-    map?: mapboxgl.Map
+    mapboxGl?: MapboxGl;
+    map?: MapboxMap;
 }
 
 type Action = {
     type: 'setMap',
-    data: mapboxgl.Map
+    data: MapboxMap,
+} | {
+    type: 'setMapboxGl',
+    data: MapboxGl,
 }
 
 const mapReducer = (state: MapboxMapState, action: Action): MapboxMapState => {
@@ -29,6 +33,11 @@ const mapReducer = (state: MapboxMapState, action: Action): MapboxMapState => {
             return {
                 ...state,
                 map: data,
+            };
+        case 'setMapboxGl':
+            return {
+                ...state,
+                mapboxGl: data,
             };
         default:
             throw new Error(`Unhandled action type: ${type}`);
@@ -40,8 +49,16 @@ const MapContext = createContext<MapboxMapState|undefined>(undefined);
 const MapboxProvider = ({
     children, containerRef, apiKey, center,
 }: MapProviderProps): JSX.Element => {
-    const [state, dispatch] = useReducer(mapReducer, { map: undefined });
-    mapboxgl.accessToken = apiKey || '';
+    const [state, dispatch] = useReducer(mapReducer, { map: undefined, mapboxGl: undefined });
+
+    const mapboxGl = useLoadMapboxGl(apiKey);
+
+    useEffect(() => {
+        if (!mapboxGl) {
+            return;
+        }
+        dispatch({ type: 'setMapboxGl', data: mapboxGl });
+    }, [mapboxGl, apiKey]);
 
     return (
         <MapContext.Provider value={state}>
@@ -55,7 +72,17 @@ const MapboxProvider = ({
     );
 };
 
-export const useMapboxMap = (): mapboxgl.Map|undefined => {
+export const useMapboxGl = (): MapboxGl|undefined => {
+    const context = useContext(MapContext);
+
+    if (context === undefined) {
+        throw new Error('useMap must be used within a MapProvider');
+    }
+
+    return context.mapboxGl;
+};
+
+export const useMapboxMap = (): MapboxMap|undefined => {
     const context = useContext(MapContext);
 
     if (context === undefined) {

@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
+import { useEffect, useState } from 'react';
 import { Point } from '../../index';
-import { useMapboxMap } from './MapContext';
+import { useMapboxGl, useMapboxMap } from './MapContext';
+import { MapboxGlMarker } from '../types';
 
 interface MapboxMarkerProps {
     coordinates?: Point;
@@ -10,7 +10,8 @@ interface MapboxMarkerProps {
 }
 
 const MapboxMarker = ({ coordinates, draggable, onChange }: MapboxMarkerProps): null => {
-    const [markerObject, setMarkerObject] = useState<mapboxgl.Marker|null>(null);
+    const mapboxgl = useMapboxGl();
+    const [markerObject, setMarkerObject] = useState<MapboxGlMarker|null>(null);
     const map = useMapboxMap();
 
     useEffect(() => {
