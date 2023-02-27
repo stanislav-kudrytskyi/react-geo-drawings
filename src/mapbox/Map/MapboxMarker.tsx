@@ -15,7 +15,7 @@ const MapboxMarker = ({ coordinates, draggable, onChange }: MapboxMarkerProps): 
     const map = useMapboxMap();
 
     useEffect(() => {
-        if (!coordinates || !map) {
+        if (!coordinates || !map || !mapboxgl) {
             return;
         }
         const marker = markerObject || new mapboxgl.Marker();
