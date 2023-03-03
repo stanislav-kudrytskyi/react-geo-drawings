@@ -3,7 +3,7 @@ import { usePolygonsData } from './PolygonBoard';
 import { DEFAULT } from './constants';
 import { Point } from '../index';
 
-interface PolygonResponse {
+export interface PolygonResponse {
     points: Point[];
     id: string;
 }

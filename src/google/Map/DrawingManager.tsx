@@ -8,7 +8,7 @@ interface DrawingManagerProps {
 const DrawingManager = ({ onInit }: DrawingManagerProps): JSX.Element|null => {
     const map = useGoogleMap();
     const drawingManager = useMemo(() => new google.maps.drawing.DrawingManager({
-        drawingMode: google.maps.drawing.OverlayType.POLYGON,
+        drawingMode: null,
         drawingControl: true,
         drawingControlOptions: {
             position: google.maps.ControlPosition.TOP_CENTER,
