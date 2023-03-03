@@ -24,7 +24,7 @@ export const contextMenuOverlayFactory = (map: google.maps.Map): ContextMenu => 
             this.googleMap = googleMap;
             this.menuContainer = document.createElement('div');
             this.menuContainer.className = 'delete-menu';
-            this.menuContainer.innerHTML = 'Delete vertex';
+            this.menuContainer.innerHTML = 'Delete point';
 
             const menu = this;
 
