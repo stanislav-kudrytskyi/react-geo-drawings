@@ -15,7 +15,7 @@ export default {
 const Template: ComponentStory<any> = () => (
     <MapProvider
         provider="mapbox"
-        apiKey="pk.eyJ1Ijoia2FuZ2Fyb293aWxkIiwiYSI6ImNsY2oyMGFjejBkdDMzb3Foa3lqYmJwZ2IifQ.yEFTVQImZwkjIxS7JwvZbA"
+        apiKey=""
     >
         <MarkerExample />
     </MapProvider>

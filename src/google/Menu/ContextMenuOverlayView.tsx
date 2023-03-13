@@ -83,7 +83,6 @@ export const contextMenuOverlayFactory = (map: google.maps.Map): ContextMenu => 
         }
 
         open(
-            // map: google.maps.Map,
             path: google.maps.MVCArray<google.maps.LatLng>,
             vertex: number,
         ) {
@@ -97,7 +96,6 @@ export const contextMenuOverlayFactory = (map: google.maps.Map): ContextMenu => 
         removeVertex() {
             const path = this.get(PATH);
             const vertex = this.get(VERTEX_INDEX);
-
             if (!path || vertex === undefined) {
                 this.close();
                 return;

@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import {
-    Polygon, GeoMap, usePolygonsUpdates, Point,
-} from '..';
+import React, { useRef, useState } from 'react';
+import { GeoMap, Point, Polygon } from '..';
+import { DrawingMode } from '../drawings/constants';
 
 const kyiv: Point = { lat: 50.4501, lng: 30.5234 };
 const berlin: Point = { lat: 52.5200, lng: 13.4050 };
@@ -55,7 +54,7 @@ const PolygonExample = () => {
                     <select
                         style={cssInput}
                         onChange={(event) => {
-                        // @ts-ignore
+                            // @ts-ignore
                             setCenter(citiesMap[event.target.value].center as Point);
                         }}
                     >
@@ -140,6 +139,7 @@ const PolygonExample = () => {
                     center={center}
                     minZoom={3}
                     zoom={zoom}
+                    modes={[DrawingMode.POLYGON]}
                     onZoomChange={(z) => setZoom(z || 0)}
                 >
                     <Polygon

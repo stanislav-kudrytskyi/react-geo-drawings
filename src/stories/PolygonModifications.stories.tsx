@@ -13,7 +13,7 @@ export default {
 } as ComponentMeta<typeof GeoMap>;
 
 const Template: ComponentStory<typeof GeoMap> = () => (
-    <MapProvider provider="google" apiKey="">
+    <MapProvider provider="google" apiKey="AIzaSyDTiFu-umQJJFYij6O3rU0BvDJ1IZnEQPQ">
         <PolygonExample />
     </MapProvider>
 );

@@ -22,11 +22,12 @@ const Map = ({
 
     useEffect(() => {
         if (containerRef.current && !map) {
-            onInit(new google.maps.Map(containerRef.current as HTMLDivElement, {
+            const m = new google.maps.Map(containerRef.current as HTMLDivElement, {
                 center: { lat: center?.lat || 48.466, lng: center?.lng || 57.118 },
                 zoom: zoom || DEFAULT_ZOOM,
                 minZoom,
-            }));
+            });
+            onInit(m);
         }
     });
 

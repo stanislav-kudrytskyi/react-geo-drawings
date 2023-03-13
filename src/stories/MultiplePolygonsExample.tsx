@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-    Polygon, GeoMap, usePolygonsUpdates, Point,
+    GeoMap, Point, Polygon, usePolygonsUpdates,
 } from '..';
+import { DrawingMode } from '../drawings/constants';
 
 type PolygonConfig = {name: string, coords: Point[]};
 const initPolygons: PolygonConfig[] = [
@@ -75,6 +76,7 @@ const MultiplePolygonExample = (): JSX.Element => {
                     containerRef={ref}
                     center={kyiv}
                     minZoom={3}
+                    modes={[DrawingMode.POLYGON]}
                 >
                     {polygons.map(({ name, coords }) => (
                         <Polygon

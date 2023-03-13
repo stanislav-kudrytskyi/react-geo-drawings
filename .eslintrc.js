@@ -39,6 +39,8 @@ module.exports = {
         }],
         'no-unused-vars': 'off',
         '@typescript-eslint/no-unused-vars': ['warn'],
+        'no-shadow': 'off',
+        '@typescript-eslint/no-shadow': 'warn',
         'import/no-extraneous-dependencies': ['error', {
             devDependencies: true,
         }],

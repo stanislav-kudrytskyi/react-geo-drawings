@@ -1,6 +1,6 @@
 {
   "name": "react-geo-drawings",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Unified interface over geo map api providers for React",
   "author": "Stanislav Kudrytskyi <stanislav.kudrytskyi@gmail.com> (https://github.com/stanislav-kudrytskyi)",
   "license": "MIT",
@@ -18,7 +18,7 @@
     "buildDefault": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 6006 -s public",
+    "storybook": "start-storybook -p 4800 -s public",
     "build-storybook": "build-storybook -s public",
     "build": "rollup -c"
   },
@@ -51,7 +51,10 @@
     ]
   },
   "devDependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
     "@googlemaps/react-wrapper": "^1.1.34",
+    "@mui/material": "^5.11.12",
     "@rollup/plugin-commonjs": "^24.0.0",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-typescript": "^10.0.1",
@@ -60,6 +63,7 @@
     "@storybook/addon-interactions": "^6.5.15",
     "@storybook/addon-links": "^6.5.15",
     "@storybook/builder-webpack5": "^6.5.15",
+    "@storybook/client-api": "^6.5.16",
     "@storybook/manager-webpack5": "^6.5.15",
     "@storybook/node-logger": "^6.5.15",
     "@storybook/preset-create-react-app": "^3.2.0",
@@ -84,7 +88,6 @@
     "eslint-plugin-react": "^7.30.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-storybook": "^0.6.8",
-    "mapbox-gl": "^2.12.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
@@ -98,12 +101,9 @@
     "web-vitals": "^2.1.4"
   },
   "peerDependencies": {
-    "react": "^17.0.2 || ^18.2.0",
-    "mapbox-gl": "^2.12.0"
+    "react": "^17.0.2 || ^18.2.0"
   },
-  "peerDependenciesMeta": {
-    "mapbox-gl": {
-      "optional": true
-    }
+  "optionalDependencies": {
+    "mapbox-gl": "^2.13.0"
   }
 }

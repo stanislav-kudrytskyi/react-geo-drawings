@@ -14,7 +14,6 @@ const DEFAULT_ZOOM = 9;
 const Map = ({ container, center, onInit }: MapProps): null => {
     const map = useRef<MapboxMap|null>(null);
     const mapboxgl = useMapboxGl();
-    console.log(mapboxgl);
     useEffect(() => {
         if (map.current || !mapboxgl) {
             return;
@@ -28,7 +27,6 @@ const Map = ({ container, center, onInit }: MapProps): null => {
         if (center) {
             options.center = [center.lng, center.lat];
         }
-        console.log(mapboxgl.accessToken);
         map.current = new mapboxgl.Map(options);
         if (onInit) {
             onInit(map.current as MapboxMap);

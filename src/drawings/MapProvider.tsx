@@ -41,7 +41,9 @@ export const MapProvider = ({
 export const useProvider = (): Provider => {
     const context = useContext(MapContext);
     if (!context?.provider) {
-        throw new Error('Failed to get Map Provider');
+        throw new Error(
+            'Value for MapProvider value hasn\'t been provided! Please put wrap your component with MapProvider',
+        );
     }
     return context.provider;
 };

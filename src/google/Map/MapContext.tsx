@@ -7,10 +7,12 @@ import DrawingManager from './DrawingManager';
 import ControlBoard from './ControlBoard';
 import { ContextMenu, contextMenuOverlayFactory } from '../Menu/ContextMenuOverlayView';
 import { PolygonDisplaySettings } from '../../drawings/Polygon';
+import { DrawingMode } from '../../drawings/constants';
 
 export interface MapProviderProps extends Omit<MapProps, 'onInit'> {
     children?: ReactNode;
     googleApiKey?: string;
+    modes?: DrawingMode[],
     addedPolygonDisplaySettings?: PolygonDisplaySettings;
 }
 
@@ -47,12 +49,13 @@ const mapReducer = (state: GoogleMapState, action: Action): GoogleMapState => {
 const render = (status: Status) => <h1>{status}</h1>;
 
 export const GoogleMapProvider = ({
-    children, googleApiKey, containerRef, center, minZoom, addedPolygonDisplaySettings, zoom, onZoomChange,
+    children, googleApiKey, containerRef, center, minZoom, addedPolygonDisplaySettings, zoom, onZoomChange, modes,
 }: MapProviderProps) => {
     const [state, dispatch] = useReducer(mapReducer, { map: undefined });
     return (
-        <Wrapper apiKey={googleApiKey || ''} render={render} libraries={['drawing']}>
-            <GoogleMapContext.Provider value={state}>
+        <GoogleMapContext.Provider value={state}>
+            <Wrapper apiKey={googleApiKey || ''} render={render} libraries={['drawing']}>
+
                 <Map
                     containerRef={containerRef}
                     onInit={(map) => dispatch({ type: 'setMap', data: map })}
@@ -62,12 +65,13 @@ export const GoogleMapProvider = ({
                     onZoomChange={onZoomChange}
                 />
                 <DrawingManager
+                    modes={modes}
                     onInit={(drawingManager) => dispatch({ type: 'setDrawingManager', data: drawingManager })}
                 />
-                <ControlBoard addedPolygonDisplaySettings={addedPolygonDisplaySettings} />
                 {children || null}
-            </GoogleMapContext.Provider>
-        </Wrapper>
+            </Wrapper>
+            <ControlBoard addedPolygonDisplaySettings={addedPolygonDisplaySettings} />
+        </GoogleMapContext.Provider>
     );
 };
 
@@ -90,7 +94,7 @@ export const useGoogleMap = (): google.maps.Map|undefined => {
     const context = useContext(GoogleMapContext);
 
     if (context === undefined) {
-        throw new Error('useMap must be used within a MapProvider');
+        throw new Error('useMap must be used within a GeoMap component');
     }
 
     return context.map;

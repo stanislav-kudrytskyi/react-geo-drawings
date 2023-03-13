@@ -6,11 +6,13 @@ import { GoogleMapProvider } from '../google/Map/MapContext';
 import MapboxProvider from '../mapbox/Map/MapContext';
 import { Point } from '../index';
 import { PolygonDisplaySettings } from './Polygon';
+import { DrawingMode } from './constants';
 
 export interface GeoMapProps {
     containerRef: RefObject<HTMLDivElement>;
     children?: ReactNode;
     center?: Point;
+    modes?: DrawingMode[],
     minZoom?: number;
     zoom?: number;
     onZoomChange?: (zoom?: number) => void;
@@ -18,7 +20,7 @@ export interface GeoMapProps {
 }
 
 const GeoMap = ({
-    containerRef, children, center, minZoom, addedPolygonDisplaySettings, zoom, onZoomChange,
+    containerRef, children, center, minZoom, addedPolygonDisplaySettings, zoom, onZoomChange, modes,
 }: GeoMapProps): JSX.Element => {
     const provider = useProvider();
     const apiKey = useApiKey();
@@ -30,6 +32,7 @@ const GeoMap = ({
                 center={center}
                 minZoom={minZoom}
                 zoom={zoom}
+                modes={modes}
                 onZoomChange={onZoomChange}
                 addedPolygonDisplaySettings={addedPolygonDisplaySettings}
             >

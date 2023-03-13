@@ -22,16 +22,18 @@ const GooglePolygon = ({
     const map = useGoogleMap();
     const contextMenu = useContextMenu();
     const [polygon, setPolygon] = useState<google.maps.Polygon|undefined>(undefined);
+    const [paths, setPaths] = useState<google.maps.MVCArray|undefined>(undefined);
+
     const onPolygonUpdate = useCallback(() => {
         if (!polygon) {
             return;
         }
         const points = mvcToLatLong(polygon?.getPath().getArray());
-
         if (onChange) {
             onChange(points);
         }
     }, [onChange, polygon]);
+
     useEffect(() => {
         if (googlePolygon) {
             setPolygon(googlePolygon);
@@ -62,9 +64,23 @@ const GooglePolygon = ({
     }, []);
 
     useEffect(() => {
-        const insertLs = polygon?.getPath().addListener('insert_at', onPolygonUpdate);
-        const updateLs = polygon?.getPath().addListener('set_at', onPolygonUpdate);
-        const removeLs = polygon?.getPath().addListener('remove_at', onPolygonUpdate);
+        const insertLs = paths?.addListener('insert_at', onPolygonUpdate);
+        const updateLs = paths?.addListener('set_at', onPolygonUpdate);
+        const removeLs = paths?.addListener('remove_at', onPolygonUpdate);
+
+        return () => {
+            [insertLs, updateLs, removeLs].forEach((ls) => {
+                if (ls) {
+                    google.maps.event.removeListener(ls);
+                }
+            });
+        };
+    }, [paths, onPolygonUpdate]);
+
+    useEffect(() => {
+        if (!polygon) {
+            return () => {};
+        }
         let menuLs: google.maps.MapsEventListener|undefined;
         if (polygon) {
             menuLs = google.maps.event.addListener(polygon, 'contextmenu', (e: any) => {
@@ -77,13 +93,11 @@ const GooglePolygon = ({
         }
 
         return () => {
-            [insertLs, updateLs, removeLs, menuLs].forEach((ls) => {
-                if (ls) {
-                    google.maps.event.removeListener(ls);
-                }
-            });
+            if (menuLs) {
+                google.maps.event.removeListener(menuLs);
+            }
         };
-    }, [polygon, onPolygonUpdate]);
+    }, [polygon]);
 
     useEffect(() => {
         if (polygon && map) {
@@ -107,7 +121,12 @@ const GooglePolygon = ({
     }, [displaySettings, polygon]);
 
     useEffect(() => {
+        if (!polygon) {
+            return;
+        }
         polygon?.setOptions({ paths: coordinates });
+        const newPath = polygon.getPath();
+        setPaths(newPath);
     }, [polygon, coordinates]);
 
     return null;

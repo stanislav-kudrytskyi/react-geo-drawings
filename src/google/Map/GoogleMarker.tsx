@@ -14,21 +14,46 @@ const GoogleMarker = ({
 }: GoogleMarkerProps): null => {
     const [markerObject, setMarkerObject] = useState<google.maps.Marker|null>(null);
     const map = useGoogleMap();
+
     useEffect(() => {
-        if (!map) {
-            return;
-        }
-        if (marker) {
+        if (marker && !markerObject) {
             setMarkerObject(marker);
+        }
+    }, [marker, markerObject]);
+
+    useEffect(() => {
+        if (!map || markerObject) {
             return;
         }
+
         const newMarker = new google.maps.Marker({
             position: coordinates,
             map,
             draggable,
         });
         setMarkerObject(newMarker);
-    }, [map, marker, coordinates]);
+    }, [map, markerObject]);
+
+    useEffect(() => {
+        if (!markerObject || !coordinates) {
+            return;
+        }
+
+        const { lat, lng } = coordinates;
+
+        if (lat === undefined || lng === undefined) {
+            return;
+        }
+
+        markerObject.setPosition({ lat, lng });
+    }, [markerObject, coordinates]);
+
+    useEffect(() => {
+        if (!markerObject) {
+            return;
+        }
+        markerObject.setDraggable(draggable || null);
+    }, [draggable, markerObject]);
 
     useEffect(() => () => {
         markerObject?.setMap(null);
