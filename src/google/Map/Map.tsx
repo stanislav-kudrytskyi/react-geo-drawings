@@ -25,6 +25,8 @@ const Map = ({
             const m = new google.maps.Map(containerRef.current as HTMLDivElement, {
                 center: { lat: center?.lat || 48.466, lng: center?.lng || 57.118 },
                 zoom: zoom || DEFAULT_ZOOM,
+                mapTypeControl: false,
+                streetViewControl: false,
                 minZoom,
             });
             onInit(m);

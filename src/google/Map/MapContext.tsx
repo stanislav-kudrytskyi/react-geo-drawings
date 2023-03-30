@@ -55,7 +55,6 @@ export const GoogleMapProvider = ({
     return (
         <GoogleMapContext.Provider value={state}>
             <Wrapper apiKey={googleApiKey || ''} render={render} libraries={['drawing']}>
-
                 <Map
                     containerRef={containerRef}
                     onInit={(map) => dispatch({ type: 'setMap', data: map })}
