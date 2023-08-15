@@ -47,6 +47,7 @@ const ControlBoard = ({ addedPolygonDisplaySettings }: ControlBoardProps): JSX.E
                     apiObject={polygon.apiObject}
                     coordinates={polygon.points}
                     figureId={polygon.polygonId}
+                    removable
                     editable={(polygon.apiObject as google.maps.Polygon).getEditable()}
                 />
             ))}

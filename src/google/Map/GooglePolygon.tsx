@@ -1,29 +1,33 @@
 import {
-    useCallback, useEffect, useState,
+    useCallback, useEffect, useMemo, useState,
 } from 'react';
 import { useContextMenu, useGoogleMap } from './MapContext';
 import { mvcToLatLong } from '../../utils';
 import { PolygonDisplaySettings } from '../../drawings/Polygon';
 import { Point } from '../..';
+import DeleteVertex from '../Menu/DeleteVertex';
+import DeletePolygon from '../Menu/DeletePolygon';
+import { Terms, useGetLocalisedLabel } from '../../drawings/LocalizationProvider';
 
 export interface GooglePolygonProps {
     coordinates?: Point[];
     googlePolygon?: google.maps.Polygon;
     editable?: boolean;
     onChange?: (points: Point[], key?: string) => void;
+    onDelete?: () => void;
     // eslint-disable-next-line react/no-unused-prop-types
     figureKey?: string;
     displaySettings?: PolygonDisplaySettings,
 }
 
 const GooglePolygon = ({
-    coordinates, editable, onChange, googlePolygon, displaySettings,
+    coordinates, editable, onChange, googlePolygon, displaySettings, onDelete,
 }: GooglePolygonProps): null => {
     const map = useGoogleMap();
     const contextMenu = useContextMenu();
     const [polygon, setPolygon] = useState<google.maps.Polygon|undefined>(undefined);
     const [paths, setPaths] = useState<google.maps.MVCArray|undefined>(undefined);
-
+    const getLabel = useGetLocalisedLabel();
     const onPolygonUpdate = useCallback(() => {
         if (!polygon) {
             return;
@@ -33,6 +37,16 @@ const GooglePolygon = ({
             onChange(points);
         }
     }, [onChange, polygon]);
+
+    const onDeletePolygon = useMemo(() => {
+        if (!onDelete || !polygon) {
+            return undefined;
+        }
+        return () => {
+            polygon.setMap(null);
+            onDelete();
+        };
+    }, [onDelete, polygon]);
 
     useEffect(() => {
         if (googlePolygon) {
@@ -85,10 +99,28 @@ const GooglePolygon = ({
         if (polygon) {
             menuLs = google.maps.event.addListener(polygon, 'contextmenu', (e: any) => {
                 // Check if click was on a vertex control point
-                if (e.vertex === undefined) {
+                if (e.vertex !== undefined) {
+                    contextMenu!.open(
+                        polygon.getPath().getAt(e.vertex),
+                        <DeleteVertex
+                            path={polygon.getPath()}
+                            label={getLabel(Terms.DELETE_VERTEX)}
+                            vertexIndex={e.vertex}
+                            close={contextMenu!.close}
+                        />,
+                    );
                     return;
                 }
-                contextMenu!.open(polygon.getPath(), e.vertex);
+                if (e.latLng && onDeletePolygon) {
+                    contextMenu!.open(
+                        e.latLng,
+                        <DeletePolygon
+                            label={getLabel(Terms.DELETE_POLYGON)}
+                            onDelete={onDeletePolygon}
+                            close={contextMenu!.close}
+                        />,
+                    );
+                }
             });
         }
 
@@ -97,7 +129,7 @@ const GooglePolygon = ({
                 google.maps.event.removeListener(menuLs);
             }
         };
-    }, [polygon]);
+    }, [polygon, onDeletePolygon, getLabel]);
 
     useEffect(() => {
         if (polygon && map) {

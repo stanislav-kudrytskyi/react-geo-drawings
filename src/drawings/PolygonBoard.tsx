@@ -24,7 +24,7 @@ type PolygonPayload = {
 }
 type PolygonsMap = Map<string, Map<string, PolygonPayload>>
 type Action = {
-    type: 'polygonUpdate'|'polygonAdded';
+    type: 'polygonUpdate'|'polygonAdded'|'polygonDeleted';
     payload: PolygonPayload;
 } | {
     type: 'setDisplaySettings';
@@ -73,6 +73,19 @@ const polygonDefinitionReducer = (
     return new Map(prevDefinition);
 };
 
+const polygonRemovedReducer = (prevDefinition: PolygonsMap, payload: PolygonPayload): PolygonsMap => {
+    const group = payload.group || DEFAULT;
+    const polygonsGroup = prevDefinition.get(group);
+    if (!polygonsGroup) {
+        throw new Error(`Polygon group has not been defined ${group}`);
+    }
+    if (!payload.polygonId) {
+        throw new Error('polygonId is missed');
+    }
+    polygonsGroup.delete(payload.polygonId);
+    return new Map(prevDefinition);
+};
+
 const polygonContextReducer: Reducer<PolygonsState, Action> = (state, { type, payload }) => {
     switch (type) {
         case 'polygonUpdate':
@@ -85,6 +98,12 @@ const polygonContextReducer: Reducer<PolygonsState, Action> = (state, { type, pa
                 ...state,
                 polygons: polygonDefinitionReducer(state.polygons, payload),
                 addedPolygons: [...state.addedPolygons, payload],
+            };
+        case 'polygonDeleted':
+            return {
+                ...state,
+                polygons: polygonRemovedReducer(state.polygons, payload),
+                addedPolygons: state.addedPolygons.filter(({ polygonId }) => polygonId !== payload.polygonId),
             };
         case 'setDisplaySettings':
             return { ...state, displaySettings: payload };
@@ -137,12 +156,24 @@ export const useDispatchPolygonUpdated = () => {
         });
     }, [dispatch]);
 };
+
 export const useDispatchPolygonAdded = () => {
     const dispatch = usePolygonRegistryDispatch();
 
     return useCallback((payload: PolygonPayload) => {
         dispatch({
             type: 'polygonAdded',
+            payload,
+        });
+    }, [dispatch]);
+};
+
+export const useDispatchPolygonDeleted = () => {
+    const dispatch = usePolygonRegistryDispatch();
+
+    return useCallback((payload: PolygonPayload) => {
+        dispatch({
+            type: 'polygonDeleted',
             payload,
         });
     }, [dispatch]);

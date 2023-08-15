@@ -3,6 +3,7 @@ import {
     GeoMap, Point, Polygon, usePolygonsUpdates,
 } from '..';
 import { DrawingMode } from '../drawings/constants';
+import { Terms } from '../drawings/LocalizationProvider';
 
 type PolygonConfig = {name: string, coords: Point[]};
 const initPolygons: PolygonConfig[] = [
@@ -76,6 +77,7 @@ const MultiplePolygonExample = (): JSX.Element => {
                     containerRef={ref}
                     center={kyiv}
                     minZoom={3}
+                    localization={{ [Terms.DELETE_VERTEX]: 'Delete vertex' }}
                     modes={[DrawingMode.POLYGON]}
                 >
                     {polygons.map(({ name, coords }) => (
@@ -83,6 +85,7 @@ const MultiplePolygonExample = (): JSX.Element => {
                             key={name}
                             coordinates={coords}
                             editable
+                            removable
                             figureId={name}
                         />
                     ))}
