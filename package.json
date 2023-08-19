@@ -1,6 +1,6 @@
 {
   "name": "react-geo-drawings",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Unified interface over geo map api providers for React",
   "author": "Stanislav Kudrytskyi <stanislav.kudrytskyi@gmail.com> (https://github.com/stanislav-kudrytskyi)",
   "license": "MIT",
