@@ -1,20 +1,13 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import React, { useRef } from 'react';
 import {
     GeoMap, MapProvider, Point,
 } from '../index';
+import { GeoMapProps } from '../drawings/GeoMap';
 
 const kyiv: Point = { lat: 50.4501, lng: 30.5234 };
 
-export default {
-    title: 'GeoDrawing/GeoMap',
-    component: GeoMap,
-    parameters: {
-        layout: 'fullscreen',
-    },
-} as ComponentMeta<typeof GeoMap>;
-
-const Template: ComponentStory<typeof GeoMap> = (args) => {
+const WarmedGeoMap = (args: Pick<GeoMapProps, 'center'|'zoom'|'minZoom'>) => {
     const ref = useRef<HTMLDivElement>(null);
 
     return (
@@ -26,8 +19,20 @@ const Template: ComponentStory<typeof GeoMap> = (args) => {
     );
 };
 
-export const GoogleMap = Template.bind({});
-GoogleMap.storyName = 'Google Map';
-GoogleMap.args = {
-    center: kyiv,
+export default {
+    title: 'GeoDrawing/GeoMap',
+    component: GeoMap,
+    args: {
+        center: kyiv,
+    },
+    render: ({ center, zoom, minZoom }) => (
+        <WarmedGeoMap
+            center={center}
+            zoom={zoom}
+            minZoom={minZoom}
+        />
+    ),
+} as Meta<typeof GeoMap>;
+
+export const GeoMapStory: StoryObj<typeof GeoMap> = {
 };
