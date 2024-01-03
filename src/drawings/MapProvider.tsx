@@ -6,7 +6,7 @@ import { DisplaySettingsProvider } from './DisplaySettingsProvider';
 
 export const GOOGLE = 'google';
 export const MAPBOX = 'mapbox';
-type Provider = 'google'|'openstreetmap'|'mapbox';
+export type Provider = 'google'|'openstreetmap'|'mapbox';
 export interface MapProviderProps {
     provider: Provider;
     apiKey?: string;

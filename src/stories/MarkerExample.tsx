@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Grid, TextField } from '@mui/material';
 import { GeoMap, Marker, Point } from '..';
-import { DrawingMode } from '../drawings/constants';
 
 const kyiv: Point = { lat: 50.4501, lng: 30.5234 };
 

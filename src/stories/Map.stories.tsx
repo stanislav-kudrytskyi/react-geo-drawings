@@ -1,38 +1,56 @@
-import { Meta, StoryObj } from '@storybook/react';
-import React, { useRef } from 'react';
+import { Decorator, Meta, StoryObj } from '@storybook/react';
 import {
-    GeoMap, MapProvider, Point,
+    GeoMap, Point,
 } from '../index';
-import { GeoMapProps } from '../drawings/GeoMap';
+import {
+    GoogleMapProviderDecorator,
+    MapboxMapProviderDecorator,
+    mapProviderDecoratorFactory,
+} from './MapProviderDecorator';
+import { Provider } from '../drawings/MapProvider';
+import { kyiv } from './constants';
 
-const kyiv: Point = { lat: 50.4501, lng: 30.5234 };
-
-const WarmedGeoMap = (args: Pick<GeoMapProps, 'center'|'zoom'|'minZoom'>) => {
-    const ref = useRef<HTMLDivElement>(null);
-
-    return (
-        <MapProvider provider="google" apiKey="">
-            <div style={{ height: '600px' }} ref={ref} id="map" />
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <GeoMap {...args} containerRef={ref} />
-        </MapProvider>
-    );
-};
-
-export default {
-    title: 'GeoDrawing/GeoMap',
+const meta = {
+    title: 'Drawings/Map',
     component: GeoMap,
+} as Meta<typeof GeoMap>;
+
+export default meta;
+
+const buildCodeSnippet = (provider: Provider) => `
+import {MapProvider, GeoMap, Point} from 'react-geo-drawings';
+
+const App = () => {
+    const ref = useRef<HTMLDivElement>(null);
+    const kyiv: Point = { lat: 50.4501, lng: 30.5234 };
+     
+    return <MapProvider provider='${provider}' apiKey='YOUR_API_KEY'>
+            <div style={{ height: '600px' }} ref={ref} id="map" />
+            <GeoMap 
+                containerRef={ref}
+                center={kyiv} 
+            />
+        </MapProvider>
+    ;
+};
+    `;
+
+type Story = StoryObj<typeof GeoMap>;
+
+const mapStoryFactory = (provider: Provider): Story => ({
     args: {
         center: kyiv,
     },
-    render: ({ center, zoom, minZoom }) => (
-        <WarmedGeoMap
-            center={center}
-            zoom={zoom}
-            minZoom={minZoom}
-        />
-    ),
-} as Meta<typeof GeoMap>;
+    parameters: {
+        docs: {
+            source: {
+                code: buildCodeSnippet(provider),
+                language: 'tsx',
+            },
+        },
+    },
+    decorators: [mapProviderDecoratorFactory(provider)],
+});
 
-export const GeoMapStory: StoryObj<typeof GeoMap> = {
-};
+export const GoogleGeoMapStory: Story = mapStoryFactory('google');
+export const MapboxGeoMapStory: Story = mapStoryFactory('mapbox');
